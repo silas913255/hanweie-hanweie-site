@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+// 第八步部署 API Gateway 后，把地址填到 .env 的 PUBLIC_CONTACT_API
+const api = import.meta.env.PUBLIC_CONTACT_API || '';
+---
+<Base title="联系我们"><div class="wrap" style="max-width:640px">
+  <h1>联系我们</h1>
+  <form id="f" data-api={api}>
+    <p><input name="name" placeholder="姓名" required style="width:100%;padding:10px" /></p>
+    <p><input name="email" type="email" placeholder="邮箱" required style="width:100%;padding:10px" /></p>
+    <p><textarea name="message" rows="6" placeholder="留言内容" required style="width:100%;padding:10px"></textarea></p>
+    <button style="padding:10px 28px;background:#0b5cad;color:#fff;border:0;border-radius:6px;cursor:pointer">提交</button>
+    <p id="msg"></p>
+  </form>
+</div></Base>
+<script>
+  const f = document.getElementById('f') as HTMLFormElement;
+  const msg = document.getElementById('msg')!;
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const api = f.dataset.api;
+    if (!api) { msg.textContent = '表单接口尚未配置'; return; }
+    msg.textContent = '提交中…';
+    try {
+      const r = await fetch(api, { method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(f))) });
+      msg.textContent = r.ok ? '提交成功，我们会尽快联系您！' : '提交失败，请稍后再试';
+      if (r.ok) f.reset();
+    } catch { msg.textContent = '网络错误，请稍后再试'; }
+  });
+</script>

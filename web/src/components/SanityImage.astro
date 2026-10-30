@@ -1,0 +1,5 @@
+---
+import { img } from '../lib/sanity';
+const { node } = Astro.props;
+---
+{node?.asset && <img src={img(node).width(1200).url()} alt={node.alt || ''} loading="lazy" />}

@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Card from '../components/Card.astro';
+import { getNews, getCases, fmtDate } from '../lib/sanity';
+const news = (await getNews()).slice(0, 3);
+const cases = (await getCases()).slice(0, 3);
+---
+<Base>
+  <section class="hero"><div class="wrap">
+    <h1>厦门汉为软件技术有限公司</h1>
+    <p>专业的云计算与数字化解决方案服务商</p>
+  </div></section>
+  <div class="wrap">
+    <h2 class="sec">新闻动态</h2>
+    <div class="grid">{news.map((n: any) => <Card href={`/news/${n.slug}/`} title={n.title} image={n.coverImage} sub={fmtDate(n.publishedAt)} text={n.excerpt} />)}</div>
+    <p><a href="/news/">查看全部新闻 →</a></p>
+    <h2 class="sec">客户案例</h2>
+    <div class="grid">{cases.map((c: any) => <Card href={`/cases/${c.slug}/`} title={c.title} image={c.coverImage} sub={[c.client, c.industry].filter(Boolean).join(' · ')} text={c.summary} />)}</div>
+    <p><a href="/cases/">查看全部案例 →</a></p>
+  </div>
+</Base>

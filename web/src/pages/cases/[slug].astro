@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import RichText from '../../components/RichText.astro';
+import { getCases, img } from '../../lib/sanity';
+export async function getStaticPaths() {
+  const list = await getCases();
+  return list.map((c: any) => ({ params: { slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props;
+---
+<Base title={c.title} description={c.summary}><article class="wrap">
+  <p><a href="/cases/">← 返回案例列表</a></p>
+  <h1>{c.title}</h1>
+  <div class="meta">{[c.client, c.industry].filter(Boolean).join(' · ')}</div>
+  {c.coverImage?.asset && <img src={img(c.coverImage).width(1200).url()} alt={c.title} style="max-width:100%;border-radius:10px;margin:20px 0" />}
+  <RichText value={c.body} />
+</article></Base>

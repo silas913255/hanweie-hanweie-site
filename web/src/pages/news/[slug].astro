@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import RichText from '../../components/RichText.astro';
+import { getNews, img, fmtDate } from '../../lib/sanity';
+export async function getStaticPaths() {
+  const list = await getNews();
+  return list.map((n: any) => ({ params: { slug: n.slug }, props: { n } }));
+}
+const { n } = Astro.props;
+---
+<Base title={n.title} description={n.excerpt}><article class="wrap">
+  <p><a href="/news/">← 返回新闻列表</a></p>
+  <h1>{n.title}</h1>
+  <div class="meta">{fmtDate(n.publishedAt)}</div>
+  {n.coverImage?.asset && <img src={img(n.coverImage).width(1200).url()} alt={n.title} style="max-width:100%;border-radius:10px;margin:20px 0" />}
+  <RichText value={n.body} />
+</article></Base>

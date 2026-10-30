@@ -1,0 +1,16 @@
+---
+// Sanity「页面」类型：slug 为 about 则生成 /about/
+import Base from '../layouts/Base.astro';
+import RichText from '../components/RichText.astro';
+import { getPages } from '../lib/sanity';
+export async function getStaticPaths() {
+  const reserved = ['news', 'cases', 'contact', '404'];
+  const list = await getPages();
+  return list.filter((p: any) => !reserved.includes(p.slug)).map((p: any) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props;
+---
+<Base title={p.title} description={p.seoDescription}><article class="wrap">
+  <h1>{p.title}</h1>
+  <RichText value={p.body} />
+</article></Base>

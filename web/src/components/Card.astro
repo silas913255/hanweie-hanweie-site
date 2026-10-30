@@ -1,0 +1,12 @@
+---
+import { img, fmtDate } from '../lib/sanity';
+const { href, title, image, sub, text } = Astro.props;
+---
+<a class="card" href={href}>
+  {image?.asset && <img src={img(image).width(640).height(360).url()} alt={title} loading="lazy" />}
+  <div class="c">
+    <h3>{title}</h3>
+    {sub && <div class="meta">{sub}</div>}
+    {text && <p>{text}</p>}
+  </div>
+</a>

@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { getCases } from '../../lib/sanity';
+const cases = await getCases();
+---
+<Base title="客户案例"><div class="wrap">
+  <h1>客户案例</h1>
+  {cases.length === 0 && <p>暂无案例</p>}
+  <div class="grid">{cases.map((c: any) => <Card href={`/cases/${c.slug}/`} title={c.title} image={c.coverImage} sub={[c.client, c.industry].filter(Boolean).join(' · ')} text={c.summary} />)}</div>
+</div></Base>

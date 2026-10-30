@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { getNews, fmtDate } from '../../lib/sanity';
+const news = await getNews();
+---
+<Base title="新闻动态"><div class="wrap">
+  <h1>新闻动态</h1>
+  {news.length === 0 && <p>暂无新闻</p>}
+  <div class="grid">{news.map((n: any) => <Card href={`/news/${n.slug}/`} title={n.title} image={n.coverImage} sub={fmtDate(n.publishedAt)} text={n.excerpt} />)}</div>
+</div></Base>
